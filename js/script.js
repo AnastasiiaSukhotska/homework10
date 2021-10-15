@@ -1,185 +1,119 @@
-document.addEventListener('DOMContentLoaded', ()=>{
-	class Person{
-		constructor(name){
-			this.name=name;
-			this.notes=[];
-			this.notesContent=[];
+
+	class Slider{
+		constructor(selector){
+
+			this.selector=selector;
+			this.timer=null;
 
 		}
-		addNoteTitle(notesTitles,noteContent){
-			this.notes.add(noteTitle);
-			this.notesContent.add(noteContent)
-
-
+		init(){
+			this.slider=document.querySelector(this.selector);
+			this.wrapper=this.slider.querySelector('.slider__wrapper');
+			this.arrowLeft=this.slider.querySelector('.slider__arrow-left');
+			this.arrowRight=this.slider.querySelector('.slider__arrow-right');
+			this.bindEvents();
 		}
-	}
-
-
-
-let people=[];
-let notes=[];
-let notesContent=[];
-let activePerson=null;
-let activeNote=null;
-let activeNoteText=null;
-let peopleList=document.querySelector('.name-list');
-let personForm={
-		name: document.querySelector('.add-name'),
-		addBtn: document.querySelector(".add-name-btn")
-	}
-let notesListForm={
-	notesConteiner: document.querySelector('.notes-list-container'),
-	notesList: document.querySelector('.note-list'),
-	inputNoteTitle: document.querySelector('.add-note-title'),
-	inputNote: document.querySelector('.add-note'),
-	addNoteBtn: document.querySelector('.add-note-btn')
-}
-let noteForm={
-	chosenNoteContainer: document.querySelector('.chosen-note-container'),
-	noteTitleArea: document.querySelector('.note-title-area'),
-	noteTitleBig: document.querySelector('.note-title-big'),
-	noteContent: document.querySelector('.note-area')
-
-}
-
-function addPerson(){
-		let name=personForm.name.value;
-		if(name.trim()===''){
-			alert("Write name");
-			return;
-		}
-		people.push(new Person(name));
-		showPeople(people);
-
-	}
-function createPersonElement(person, i){
-		let personElement= document.createElement('div');
-		personElement.classList.add('person');
-		if(person===activePerson){
-			personElement.classList.add('active');
-		}
-		personElement.dataset.index=i;
-		personElement.append(`${person.name}`);
-		return personElement;
-	}
-function showPeople(people){
-		peopleList.innerHTML='';
-		let peopleElements = people.map((p, i)=>createPersonElement(p,i));
-		peopleList.append(...peopleElements);
-	}
-
-
-
-function createNoteElem(note, i){
-		let noteTitleElem=document.createElement('div');
-		noteTitleElem.classList.add('note-title');
-		if(note===activeNote){
-			noteTitleElem.classList.add('active');
-		}
-		noteTitleElem.dataset.index=i;
-		noteTitleElem.append(note);
-		return noteTitleElem;
-		}
-
-function createNoteContentElem(noteContent, i){
-		let noteTextContentElem=document.createElement('p');
-		noteTextContentElem.dataset.index=i;
-		noteTextContentElem.append(noteContent);
-		return noteTextContentElem;
-		}
-
-
-
-function showPersonNotes(){
-		if(activePerson===null){
-				notesListForm.notesList.style.display='none';
-				notesListForm.inputNote.style.display='none';
-				notesListForm.inputNoteTitle.style.display='none';
-				notesListForm.addNoteBtn.style.display='none';
-				return;
-			}
-				let noteElems=activePerson.notes.map((m, i)=>createNoteElem(m, i));
-				notesListForm.notesList.innerHTML=('');
-				notesListForm.notesList.append(...noteElems);
-				notesListForm.notesList.style.display='block';
-				notesListForm.inputNote.style.display='block';
-				notesListForm.inputNoteTitle.style.display='block';
-				notesListForm.addNoteBtn.style.display='block';
-		}
-
-
-function addNotesTitle(){
-		if (activePerson===null) return;
-	         let noteTitle=notesListForm.inputNoteTitle.value;
-	         let noteText=notesListForm.inputNote.value;
-	         activePerson.notes.push(noteTitle);
-	         activePerson.notesContent.push(noteText);
-	         
-	    showPersonNotes();
-		}
-
-
-function showChosenNote(){
-		if(activeNote===null){
-				
-			noteForm.noteTitleArea.style.display='none';
-			noteForm.noteTitleBig.style.display='none';
-			noteForm.noteContent.style.display='none';
-			return;
-			}
-			let noteTextContentElems=activePerson.notesContent.map((m,i)=>createNoteContentElem(m,i));
-			noteForm.noteTitleBig.innerHTML=('');
-			noteForm.noteContent.innerHTML=('');
-			noteForm.noteTitleArea.style.display='block';
-			noteForm.noteTitleBig.style.display='block';
-			noteForm.noteContent.style.display='block';
-		}
-
-function addNoteContent(){
-			let noteTextContent=notesListForm.inputNote.value;
-			activePerson.notesContent.push(noteTextContent);
-			showChosenNote();
-		}
-
-
-		
-
-personForm.addBtn.addEventListener('click', ()=>addPerson());
-peopleList.addEventListener('click', (e)=>{
-	if (!e.target.matches('.person')) return;
-	let index =e.target.dataset.index;
-	activePerson=people[index];
-	showPeople(people);
-	showPersonNotes();
+		bindEvents(){
+			this.arrowRight.addEventListener('click', ()=>this.nextSlide(Slider.SLIDE_TIME));
+			this.arrowLeft.addEventListener('click', ()=>this.previousSlide(Slider.SLIDE_TIME));
 			
-})
-notesListForm.addNoteBtn.addEventListener('click', ()=>addNotesTitle());
-notesListForm.notesList.addEventListener('click', (e)=>{
-	if (!e.target.matches('.note-title')) return;
-	let index =e.target.dataset.index;
-	activeNote=activePerson.notes[index];
-	activeNoteText=activePerson.notesContent[index];
-	showPersonNotes();
-	showPeople(people);
+
+		}
+
+		autoScroll(time){
+			if(this.timer!==null) return;
+			let frameCount=time/Slider.FRAME_TIME;
+			let step = 100/frameCount;
+			let currentPosition=0;
+			scroll=setInterval(()=>{
+				if (this.timer!==null){
+
+					clearInterval(scroll);
+					this.wrapper.style.marginLeft='';
+				}
+				else if (currentPosition<=-100){
+					this.wrapper.append(this.wrapper.children[0]);
+					currentPosition=0;
+					this.wrapper.style.marginLeft='';
+					return;
+				}
+				currentPosition-=step;
+				this.wrapper.style.marginLeft=currentPosition+'%';
+
+			}, Slider.FRAME_TIME);
+		}
+
+
+		nextSlide(time){
+			if(this.timer!==null) return;
+			let frameCount=time/Slider.FRAME_TIME;
+			let step = 100/frameCount;
+			let currentPosition=0;
+			this.timer=setInterval(()=>{
+				if (currentPosition<=-100){
+					clearInterval(this.timer);
+					this.timer=null;
+					this.wrapper.append(this.wrapper.children[0]);
+					this.wrapper.style.marginLeft='';
+					this.autoScroll(Slider.AUTO_SLIDE_TIME);
+					return;
+				}
+				currentPosition-=step;
+				this.wrapper.style.marginLeft=currentPosition+'%';
+
+			}, Slider.FRAME_TIME);
+			
+			}
+
+			previousSlide(time){
+				if(this.timer!==null) return;
+			let frameCount=time/Slider.FRAME_TIME;
+			let step = 100/frameCount;
+			let currentPosition=-100;
+			this.wrapper.prepend(this.wrapper.lastChild);
+
+			this.timer=setInterval(()=>{
+				if (currentPosition>=0){
+					clearInterval(this.timer);
+					this.timer=null;
+					this.wrapper.style.marginLeft='';
+					this.autoScroll(Slider.AUTO_SLIDE_TIME);
+					return;
+				}
+				currentPosition+=step;
+				this.wrapper.style.marginLeft=currentPosition+'%';
+				
+
+			}, Slider.FRAME_TIME);
+
+			}
+		}
+		Slider.FRAME_TIME=50;
+		Slider.SLIDE_TIME=5000;
+		Slider.AUTO_SLIDE_TIME=10000;
+		let scroll;
 	
 
-})
-notesListForm.notesList.addEventListener('click', (e)=>{
-	if (!e.target.matches('.note-title')) return;
-	showPeople(people);
-	showPersonNotes(notes);
-	showChosenNote();
-	noteForm.noteTitleBig.append(activeNote);
-	noteForm.noteContent.append(activeNoteText);
-
-})
 
 
-
-
-showPeople(people);
-showPersonNotes();
-showChosenNote();
-
-
+document.addEventListener('DOMContentLoaded', ()=>{
+	let slider=new Slider('.slider');
+	let sliderElement=document.querySelector('.slider');
+	slider.init();
+	slider.autoScroll(Slider.AUTO_SLIDE_TIME);
+	sliderElement.addEventListener('mouseover', ()=>{
+		clearInterval(scroll);
+		slider.wrapper.style.marginLeft='';
+		
+		
 	})
+	sliderElement.addEventListener('mouseout', ()=>{
+		slider.autoScroll(Slider.AUTO_SLIDE_TIME);
+	})
+
+})
+
+
+
+
+

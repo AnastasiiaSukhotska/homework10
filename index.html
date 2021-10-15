@@ -6,173 +6,70 @@
 	<title>Document</title>
 	<script src="js/script.js"></script>
 	<style>
-
-	*{
-		box-sizing: border-box;
-		overflow: hidden;
-		
-	}
-		.container{
-			display: flex;
-			flex-direction: row;
-			align-items: stretch;
-			background-color: #fff;
-			width: 800px;
-			margin: 0 auto;
-			justify-content: center;
-		}
-
-		.names-container, .notes-list-container, .chosen-note-container{
-			width: 33%;
-			background-color: #369;
-			margin: 10px;
-			padding: 10px;
-		}
-
-		.added-area{
-			display: flex;
-			flex-wrap: wrap;
-
-		}
-
-		.added-area-names.added-area{
-			flex-wrap: nowrap;
-		}
-
-		button{
-			width: 50px;
-			height: 40px;
-			border-radius: 40%;
-			border: 0;
-			background-color: white;
-			font-weight: bold;
-			box-shadow: 1px 1px 4px black;
-			text-shadow: 1px 1px 1px grey;
-		}
-
-
-		input, textarea{
-			flex-grow: 1;
-			height: 40px;
-			border-radius: 30px;
-			border: 0;
-			margin-bottom: 10px;
-			box-shadow: 1px 1px 4px black;
-
-		}
-		input{
-			margin-right: 30px;
-			padding: 5px;
-		}
-
-		input:focus, textarea:focus{
-			outline: none;
-		}
-
-		textarea{
-			padding: 10px;
-		}
-
-		.name-list{
-			margin: 0 auto;
-			padding: 0;
-		}
-
-		.person, .note-title{
-			color: white;
-			box-shadow: 1px 1px 4px black;
-			padding: 5px;
-			margin-bottom: 10px;
-			font-weight: bold;
-			display: block;
+		.slider{
+			width: 960px;
+			height: 500px;
+			border: 1px solid red;
 			position: relative;
-		}
-
-
-		.add-title-and-button{
-			display: flex;
-			flex-wrap: nowrap;
-		}
-
-		.note-area, .note-title-area{
-			background-color: white;
-			border-radius: 30px;
-		}
-
-		.note-title-area{
-			
-			border-radius: 30px;
-
-		}
-
-
-		.note-area{
-		
-			margin-top: 10px;
-			padding: 20px;
-			margin-bottom: 15px;
-			flex-wrap: wrap;
-			display: flex;
-
-		}
-
-		h2{
-			padding: 0;
-			margin: 0;
-			text-align: center;
-			text-shadow: 1px 1px 1px grey;
-
-
-		}
-
-		p{
-			
-		display: flex;
-		flex-wrap: wrap;
-		word-wrap: break-word;
-		}
-
-		.active{
-			background-color: #365;
-		}
-
-		.note-title-big{
 			overflow: hidden;
-			padding: 5px;
 		}
 
+		.slider .slider__wrapper{
+			width: 200%;
+			font-size: 0;
+			
+		}
 
+		.slider .slider__slide{
+			width: 50%;
+			background-color: #369;
+			font-size: 16px;
+			display: inline-block;
+			height: 500px;
+			box-sizing: border-box;
+			border: 5px solid black;
+		}
 
+		.slider .slider__arrow{
+			position: absolute;
+			top: 50%;
+			margin-top: -20px;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			border: 5px solid black;
+			cursor: pointer;
+		}
+
+		.slider .slider__arrow-left{
+			left: 20px;
+		}
+
+		.slider .slider__arrow-right{
+			right: 20px;
+		}
+	
 	</style>
 </head>
 <body>
-	<div class="container">
-		<div class="names-container">
-			<div class="added-area added-area-names">
-				<input type="text" class="add-name">
-				<button class="add-name-btn btn">ADD</button>
+	<div class="slider">
+		<span class="slider__arrow slider__arrow-left"></span>
+		<span class="slider__arrow slider__arrow-right"></span>
+		<div class="slider__wrapper">
+			<div class="slider__slide">
+				<div class="x">1</div>
 			</div>
-			<div class="name-list">
+			<div class="slider__slide">
+				<div class="x">2</div>
 			</div>
-		</div>
-		<div class="notes-list-container">
-			<div class="added-area">
-				<div class="add-title-and-button">	
-				  <input type="text" class="add-note-title">
-				  <button class="add-note-btn btn">ADD</button>
-				</div>
-				<textarea name="text" cols="30" rows="10" class="add-note"></textarea>
-				</div>
-				<div class="note-list">
-				</div>
-			
-		</div>
-		<div class="chosen-note-container">
-			<div class="note-title-area">
-				<h2 class="note-title-big">Note</h2>
+			<div class="slider__slide">
+				<div class="x">3</div>
 			</div>
-			<div class="note-area">
-				<p>vghvyjvyvtyvytctrxcrdxrgxrenjhno;ubhiubuhvukgder</p>
+			<div class="slider__slide">
+				<div class="x">4</div>
+			</div>
+			<div class="slider__slide">
+				<div class="x">5</div>
 			</div>
 		</div>
 	</div>

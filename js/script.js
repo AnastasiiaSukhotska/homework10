@@ -11,9 +11,19 @@
 			this.wrapper=this.slider.querySelector('.slider__wrapper');
 			this.arrowLeft=this.slider.querySelector('.slider__arrow-left');
 			this.arrowRight=this.slider.querySelector('.slider__arrow-right');
+			this.sliderElement=document.querySelector('.slider');
 			this.bindEvents();
 		}
 		bindEvents(){
+			this.sliderElement.addEventListener('mouseover', ()=>{
+				
+				this.wrapper.style.marginLeft='';
+				clearInterval(scroll);
+			
+			});
+			this.sliderElement.addEventListener('mouseout', ()=>{
+			this.autoScroll(Slider.AUTO_SLIDE_TIME);
+			});
 			this.arrowRight.addEventListener('click', ()=>this.nextSlide(Slider.SLIDE_TIME));
 			this.arrowLeft.addEventListener('click', ()=>this.previousSlide(Slider.SLIDE_TIME));
 			
@@ -27,9 +37,9 @@
 			let currentPosition=0;
 			scroll=setInterval(()=>{
 				if (this.timer!==null){
-
 					clearInterval(scroll);
 					this.wrapper.style.marginLeft='';
+					return;
 				}
 				else if (currentPosition<=-100){
 					this.wrapper.append(this.wrapper.children[0]);
@@ -55,7 +65,7 @@
 					this.timer=null;
 					this.wrapper.append(this.wrapper.children[0]);
 					this.wrapper.style.marginLeft='';
-					this.autoScroll(Slider.AUTO_SLIDE_TIME);
+					
 					return;
 				}
 				currentPosition-=step;
@@ -66,7 +76,7 @@
 			}
 
 			previousSlide(time){
-				if(this.timer!==null) return;
+			if(this.timer!==null) return;
 			let frameCount=time/Slider.FRAME_TIME;
 			let step = 100/frameCount;
 			let currentPosition=-100;
@@ -77,7 +87,7 @@
 					clearInterval(this.timer);
 					this.timer=null;
 					this.wrapper.style.marginLeft='';
-					this.autoScroll(Slider.AUTO_SLIDE_TIME);
+					
 					return;
 				}
 				currentPosition+=step;
@@ -101,15 +111,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	let sliderElement=document.querySelector('.slider');
 	slider.init();
 	slider.autoScroll(Slider.AUTO_SLIDE_TIME);
-	sliderElement.addEventListener('mouseover', ()=>{
-		clearInterval(scroll);
-		slider.wrapper.style.marginLeft='';
-		
-		
-	})
-	sliderElement.addEventListener('mouseout', ()=>{
-		slider.autoScroll(Slider.AUTO_SLIDE_TIME);
-	})
+	
+	
 
 })
 
